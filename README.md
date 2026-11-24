@@ -17,3 +17,13 @@ echo "CONGRESS_API_KEY=your-key" > .env        # free key: https://api.congress.
 - `GET /api/votes/{congress}/{session}/{roll}`: one vote, with the bill, its CRS summary, totals by party, and every member's vote
 
 Interactive docs: http://localhost:8000/docs
+
+## Public demo (GitHub Pages)
+
+https://ngup1.github.io/Attending-Policy/ is a static snapshot: no backend runs there. To update it:
+
+```sh
+.venv/bin/python prewarm.py --refresh   # pick up new votes
+.venv/bin/python export_static.py       # rewrite frontend/data/
+git add frontend/data && git commit -m "Update data snapshot" && git push   # the Pages workflow redeploys
+```

@@ -2,6 +2,8 @@
 (() => {
   const API = "/api";
   const TABLE_PREVIEW = 10;
+  // On GitHub Pages there is no backend: read the snapshot written by export_static.py.
+  const STATIC = location.hostname.endsWith("github.io") || new URLSearchParams(location.search).has("static");
 
   const state = {
     chamber: "all",
@@ -31,14 +33,33 @@
     set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* storage unavailable */ } },
   };
 
-  async function getJSON(path) {
-    const res = await fetch(API + path);
+  async function getJSON(url) {
+    const res = await fetch(url);
     if (!res.ok) {
       let detail = res.statusText;
       try { detail = (await res.json()).detail || detail; } catch { /* not JSON */ }
-      throw new Error(detail);
+      throw new Error(detail || `HTTP ${res.status}`);
     }
     return res.json();
+  }
+
+  let snapshot;
+  async function fetchVotes(chamber, q) {
+    if (!STATIC) return getJSON(`${API}/votes?${new URLSearchParams({ chamber, q })}`);
+    snapshot = snapshot || getJSON("data/votes.json");
+    const data = await snapshot;
+    if (chamber === "senate") return { results: [], count: 0, note: "Senate roll-call votes are not in the Congress.gov API yet." };
+    const norm = (s) => (s || "").toLowerCase().replace(/[.\s]/g, "");
+    const lq = q.toLowerCase();
+    const results = !q ? data.results : data.results.filter((v) =>
+      norm(v.bill.label).includes(norm(q)) || (v.bill.title || "").toLowerCase().includes(lq) || (v.bill.policy_area || "").toLowerCase().includes(lq));
+    return { results, count: results.length, generated_at: data.generated_at };
+  }
+
+  function fetchVote(id) {
+    if (STATIC) return getJSON(`data/votes/${encodeURIComponent(id)}.json`);
+    const [congress, session, roll] = id.split("-");
+    return getJSON(`${API}/votes/${congress}/${session}/${roll}`);
   }
 
   const ICONS = {
@@ -58,9 +79,9 @@
     const list = $("#vote-list");
     list.innerHTML = '<li class="list-note">Loading…</li>';
     try {
-      const params = new URLSearchParams({ chamber: state.chamber, q: state.q });
-      const data = await getJSON(`/votes?${params}`);
+      const data = await fetchVotes(state.chamber, state.q);
       state.votes = data.results;
+      if (data.generated_at) $("#data-note").textContent = ` · Snapshot from ${fmtDate(data.generated_at)}`;
       renderList(data.note);
       const fromHash = location.hash.slice(1);
       const target = state.votes.find((v) => v.id === fromHash) || state.votes.find((v) => v.id === state.selectedId) || state.votes[0];
@@ -112,9 +133,8 @@
 
     const panel = $("#detail");
     panel.innerHTML = '<div class="placeholder">Loading vote…</div>';
-    const [congress, session, roll] = id.split("-");
     try {
-      const detail = await getJSON(`/votes/${congress}/${session}/${roll}`);
+      const detail = await fetchVote(id);
       if (state.selectedId !== id) return; // a newer click won
       state.detail = detail;
       renderDetail();
