@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roll Call Tracker · Attending! Policy</title>
+  <meta name="description" content="Clear, nonpartisan records of how Congress votes on the issues that shape everyday life.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b2148'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='18' font-weight='700' fill='%23fff' text-anchor='middle'%3EA!%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="utility-bar">
+    <div class="wrap">An independent, nonpartisan civic project · Data from Congress.gov</div>
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#" aria-label="Attending! Policy home">
+        <span class="brand-mark" aria-hidden="true">A!</span>
+        <span class="brand-name">Attending<span class="bang">!</span> Policy</span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="#" class="active" aria-current="page">Bills &amp; Votes</a>
+        <span class="nav-soon" title="Coming soon">Legislators <small>Soon</small></span>
+        <span class="nav-soon" title="Coming soon">Committees <small>Soon</small></span>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" type="button" aria-label="Notifications (coming soon)" title="Coming soon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        </button>
+        <button class="btn btn-outline-light" type="button" title="Coming soon">Sign in</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <p class="eyebrow eyebrow-light">119th United States Congress</p>
+        <h1>Roll call tracker</h1>
+        <p class="lede">Clear, nonpartisan records of how Congress votes on the issues that shape everyday life.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Chamber">
+        <button type="button" data-chamber="all" class="active" aria-pressed="true">All chambers</button>
+        <button type="button" data-chamber="house" aria-pressed="false">House</button>
+        <button type="button" data-chamber="senate" aria-pressed="false">Senate</button>
+      </div>
+    </div>
+  </section>
+
+  <main id="main" class="wrap layout">
+    <aside class="panel list-panel" aria-label="Recent floor votes">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="bill-search" type="search" placeholder="Search bills or topics" aria-label="Search bills or topics">
+      </div>
+      <div class="list-head">
+        <span class="eyebrow">Recent floor votes</span>
+        <span id="result-count" class="muted"></span>
+      </div>
+      <ol id="vote-list" class="vote-list" aria-live="polite"></ol>
+    </aside>
+
+    <section id="detail" class="panel detail-panel" aria-live="polite">
+      <div class="placeholder">Loading votes…</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="brand brand-footer">
+        <span class="brand-mark" aria-hidden="true">A!</span>
+        <span class="brand-name">Attending<span class="bang">!</span> Policy</span>
+      </div>
+      <p>An independent project. Not affiliated with any government agency. Vote records and bill summaries come from Congress.gov and the Congressional Research Service. Senate roll-call votes are not yet included.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
